@@ -1,0 +1,305 @@
+@font-face {
+    font-family: PLANK_;
+    src: url(PLANK___.TTF);
+  }
+@font-face {
+  font-family: bit;
+  src: url(8-bit-hud.ttf);
+}
+
+body{
+    cursor: url(images/coin2.png), crosshair;
+    background-image: url("https://media.istockphoto.com/id/1354982067/vector/sky-starry-black-night-background-with-star-starry-galaxy-space-8bit-texture-in-flat-style.jpg?s=170667a&w=0&k=20&c=mJzEnx-REZrfhBwBC19KOYKd6cjTNH3mmXu9Fg0atNY=");
+    text-align: center;
+}
+#top, #update{
+  display:flex;
+  align-items:center;
+  justify-content: center;
+  font-family: bit;
+  color:white;
+}
+h1{
+    font-family: PLANK_;
+    color: white;
+    font-size: 50px;
+    text-shadow: 0 0 20px #FF0000;
+    letter-spacing: 3px;
+    text-align:center;
+    
+    
+}
+#credits, #statsWindow{
+  margin-left: auto;
+}
+#insert{
+  font-family: bit;
+  position:relative;
+    animation-name: title;
+    animation-duration: 2.5s;
+    animation-iteration-count: infinite;
+}
+
+#player{
+    height: 80px;
+    position:relative;
+    animation-name: ship;
+    animation-duration: 3.2s;
+    animation-iteration-count: infinite;
+}
+
+#enemy2,#enemy4,#enemy6{
+  height:90px;
+  position:relative;
+    animation-name: ship;
+    animation-duration: 4.2s;
+    animation-iteration-count: infinite;
+}
+#enemy1,#enemy3,#enemy5{
+  height:90px;
+  position:relative;
+    animation-name: ship;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+}
+
+
+@keyframes ship {
+  0%   {left:0px; top:0px;}
+  50%  { left:0px; top:200px;}
+  100% { left:0px; top:0px;} 
+}
+@keyframes title {
+  0%   {left:0px; top:60px;}
+  50%  { left:0px; top:100px;}
+  100% { left:0px; top:60px;} 
+}
+
+
+#Ship {
+    display: flex;
+    flex-direction: row;
+    margin-left: 25%;
+    margin-right: 20%;
+  }
+  #Ship :nth-child(1) { order: 1; }
+  #Ship :nth-child(2) { order: 2; }
+  #Ship :nth-child(3) { order: 3; }
+  #Ship :nth-child(4) { order: 4; }
+  #Ship :nth-child(5) { order: 5; }
+  #Ship :nth-child(6) { order: 6; }
+  #Ship :nth-child(7) { order: 7; }
+
+  #red{
+    color:red;
+  }
+  #yellow{
+    color:yellow;
+  }
+
+  #results, #statsWindow{
+    font-family: bit;
+    height:200px;
+    font-size: 8px;
+    color:white;
+    align-content: center;
+    text-align:left;
+    background-color: gray;
+    border-color: yellow;
+    border-width: 3px;
+    border-style: groove;
+    height:180px;
+    padding: 5px;
+  }
+  
+    
+
+ 
+  /* CSS */
+  .button-82-pushable, .button-83-pushable {
+    position: relative;
+    border: none;
+    background: transparent;
+    padding: 0;
+    cursor: crosshair;
+    outline-offset: 4px;
+    transition: filter 250ms;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+  }
+  
+  .button-82-shadow, .button-83-shadow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
+    background: hsl(0deg 0% 0% / 0.25);
+    will-change: transform;
+    transform: translateY(2px);
+    transition:
+      transform
+      600ms
+      cubic-bezier(.3, .7, .4, 1);
+  }
+  
+  .button-82-edge {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
+    background: linear-gradient(
+      to left,
+      hsl(340deg 100% 16%) 0%,
+      hsl(340deg 100% 32%) 8%,
+      hsl(340deg 100% 32%) 92%,
+      hsl(340deg 100% 16%) 100%
+    );
+  }
+  
+  .button-82-front {
+    display: block;
+    position: relative;
+    padding: 12px 27px;
+    border-radius: 100%;
+    font-size: 0.5rem;
+    color: white;
+    background: hsl(345deg 100% 47%);
+    will-change: transform;
+    transform: translateY(-4px);
+    transition:
+      transform
+      600ms
+      cubic-bezier(.3, .7, .4, 1);
+  }
+  .button-83-edge {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
+    background: linear-gradient(
+      to left,
+      hsl(53, 71%, 25%),
+      hsl(48, 100%, 37%) 8%,
+      hsl(48, 100%, 37%) 8%,
+      hsl(53, 71%, 25%)
+    );
+  }
+  
+  .button-83-front {
+    display: block;
+    position: relative;
+    padding: 12px 27px;
+    border-radius: 100%;
+    font-size: 0.5rem;
+    color: white;
+    background: hsl(48, 82%, 56%);
+    will-change: transform;
+    transform: translateY(-4px);
+    transition:
+      transform
+      600ms
+      cubic-bezier(.3, .7, .4, 1);
+  }
+  
+  @media (min-width: 768px) {
+    .button-82-front, .button-83-front {
+      font-size: 1px;
+      /* padding: 2px 2px; */
+    }
+  }
+  
+  .button-82-pushable:hover, .button-83-pushable:hover {
+    filter: brightness(110%);
+    -webkit-filter: brightness(110%);
+  }
+  
+  .button-82-pushable:hover .button-82-front, .button-83-pushable:hover .button-83-front {
+    transform: translateY(-6px);
+    transition:
+      transform
+      250ms
+      cubic-bezier(.3, .7, .4, 1.5);
+  }
+  
+  .button-82-pushable:active .button-82-front, .button-83-pushable:active .button-83-front {
+    transform: translateY(-2px);
+    transition: transform 34ms;
+  }
+  
+  .button-82-pushable:hover .button-82-shadow, .button-83-pushable:hover .button-83-shadow {
+    transform: translateY(4px);
+    transition:
+      transform
+      250ms
+      cubic-bezier(.3, .7, .4, 1.5);
+  }
+  
+  .button-82-pushable:active .button-82-shadow, .button-83-pushable:active .button-83-shadow {
+    transform: translateY(1px);
+    transition: transform 34ms;
+  }
+  
+  .button-82-pushable:focus:not(:focus-visible), .button-83-pushable:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  .wrapper.story {
+    position: relative;
+   color:white;
+    font-size: 8px;
+    font-family: "bit", sans-serif;
+    height:auto;
+}
+.story .type{
+    padding: 2rem 1rem;
+    width: auto;
+    margin: auto; 
+}
+.story h3, h2{
+    width: 13ch;
+    border-right: 4px solid white;
+    margin: 2rem auto;
+    white-space: nowrap;
+    overflow:hidden;
+    animation: typing 6s steps(40, end) forwards, blink-caret 0.5s step-end infinite alternate;
+}
+
+.typing {
+  width: 13ch;
+  border-right: 4px solid white;
+  margin: 2rem auto;
+  white-space: pre;
+  overflow: hidden;
+}
+
+.typing-finished {
+  animation: none;
+  border-right-color: transparent;
+}
+
+@keyframes typing {
+  from {
+      width: 0;
+  }
+  to {
+      width:100%;
+  }
+}
+
+@keyframes blink-caret {
+  from, to {
+      border-color: transparent;
+  }
+  50% {
+      border-color: white;
+      
+  }
+}
+

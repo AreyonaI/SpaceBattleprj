@@ -1,14 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="index.js"></script>
-    <link rel="stylesheet" href="index.css">
-</head>
-<body>
-    
-</body>
-</html>
 
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css" />
+</head>
+
+<body id="body">
+    <h1>Space Battle</h1>
+    <div id="top">
+        <h6 id="instructions">
+            How To Play:<br />
+            <p id="red">red = attack</p>
+            <p id="yellow">yellow= retreat</p>
+        </h6>
+        <h6 id="credits">Credits: 0</h6>
+    </div>
+    <br />
+    <h1 id="insert" onclick="playSound()">INSERT COIN</h1>
+    <div id="wrapper" class="wrapper story">
+        <h2>SITUATION!</h2>
+        <div class="type">
+            <h3 class="typing">
+                Earth has been attacked by a horde of aliens!<br />
+                You are the captain of the USS Assembly, on a mission<br />to destroy
+                every last alien ship.<br />
+
+                Battle the aliens as you try to destroy them with your lasers.<br />
+
+                There are six alien ships. The aliens' weakness is that they are
+                <br />
+                logical and attack one at a time: they will wait to see the outcome
+                of<br />
+                a battle before deploying another alien ship. Your strength is
+                <br />that you have the initiative and get to attack first. However,
+                you<br />
+                do not have targeting lasers and can only attack the aliens<br />
+                in order. After you have destroyed a ship, you have the <br />option
+                to make a hasty retreat.<br />
+                <br />
+                Click Anywhere To Start!
+            </h3>
+        </div>
+    </div>
+
+    <div id="Ship"></div>
+    <div id="update">
+        <p id="results"></p>
+        <div id="statsWindow">
+            <p id="playerStats"></p>
+            <br />
+            <p id="enemyStats"></p>
+        </div>
+    </div>
+
+    <div id="player-options">
+        <!-- HTML sourced from someone else! but changed for my purposes-->
+        <button class="button-82-pushable" id="attack-btn" role="button">
+            <span class="button-82-shadow"></span>
+            <span class="button-82-edge"></span>
+            <span class="button-82-front text"> </span>
+        </button>
+        <button class="button-83-pushable" id="retreat-btn" role="button">
+            <span class="button-83-shadow"></span>
+            <span class="button-83-edge"></span>
+            <span class="button-83-front text"> </span>
+        </button>
+    </div>
+    <script src="index.js"></script>
+</body>
+
+</html>
