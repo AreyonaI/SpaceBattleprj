@@ -25,6 +25,15 @@ class enemy {
     // this.accuracy = Math.round((Math.random()*(.81 - .6) + .6) * 10) / 10//enemy accuracy is between .6 and .8
     this.ships.push(new Ship(this.hull, this.firepower, this.accuracy));
   }
+// The aliens send a random number of ships to attack Earth. Think of a reasonable range and implement it.
+  generateFleet() {
+    let x = Math.round(Math.random() * (6 - 3) + 9);
+
+    for (let i = 0; i < x; i++) {
+      this.addShips();
+    }
+  }
+
 }
 let enemyAliens = new enemy();
 //console.log(enemyAliens);
@@ -60,7 +69,7 @@ let show = () => {
   wrapper.style.visibility = "visible";
   const typingText = document.querySelector(".typing");
   typingText.classList.add("typing");
-  document.getElementById("body").style.cursor="crosshair";
+  document.getElementById("screen").style.cursor="crosshair";
   playSound2()
 };
 
@@ -87,6 +96,32 @@ const resultContainer = document.getElementById("results");
 resultContainer.style.visibility="hidden";
 
 document.getElementById("wrapper").addEventListener("click", startGame);
+let enemyShipStats = document.createElement("p");
+enemyShipStats.setAttribute("id", `eShipStats`);
+const sheild = document.getElementById("sheild");
+sheild.style.visibility="hidden";
+
+const sheildWorking = () => {
+  // Scientists have improved your ship's shields. They don't work that consistently, and only improve your hit points by a random number each time
+  const x = Math.random() < 0.5;
+
+  if (x === true) {
+    let sheildPwr = Math.round(Math.random() * 10);
+    let shipImg=document.getElementById("player"); //randomizes ship sheild at the start of every battle
+    if (sheildPwr > 0) {
+      sheild.style.visibility = "visible";
+      
+      sheild.innerText = `Sheild Activated!\n Sheild Power: ${sheildPwr}`;
+      USSAssembly.hull += sheildPwr;
+      shipImg.src = "/images/USS_ShipShield.png";
+    }
+    else{
+      shipImg.src = "/images/USS_Ship.png";
+    }
+  }
+};
+let selectedEnemyIndex = -1;
+const enemyFleet = enemyAliens.ships;
 
 let attackButtonClicked = false;
 let retreatButtonClicked = false;
@@ -101,12 +136,25 @@ const createEnemies = () => {
     enemyImg.setAttribute("name", `enemy`);
     document.getElementById("Ship").append(enemyImg);
   //above lines create a enemy image for each enemy
+  enemyImg.addEventListener("click", () => {
+    // Scientists have developed a super targeting computer for your lasers. You now are asked which of the aliens you would like to hit with your lasers.
+    selectedEnemyIndex = i;
+    select.innerText = `Enemy ${selectedEnemyIndex + 1} Selected`;
+    enemyShipStats.innerText = `Hull:${enemyFleet[selectedEnemyIndex].hull}\n
+    Firepower: ${enemyFleet[selectedEnemyIndex].firepower}\n
+    Accuracy:${enemyFleet[selectedEnemyIndex].accuracy}\n`;
+    document.getElementById("select").append(enemyShipStats);
+    // console.log(enemyFleet[selectedEnemyIndex].hull);
+  });
+  document.getElementById("Ship").append(enemyImg);
+  //above lines create a enemy image for each enemy
   }
 }
   const attackEnemies = () => {// Function to handle attacking the enemy ship
   const enemyFleet = enemyAliens.ships;
   const playerStats = document.getElementById("playerStats");
   const enemyStats = document.getElementById("enemyStats");
+  const select = document.getElementById("select");
   let pS='';
   let eS='';
   let message = "";
@@ -121,6 +169,12 @@ const createEnemies = () => {
     if(!attackButtonClicked){//if attack btn not hit it doesnt continue the loop
       return;
     }
+
+      if (selectedEnemyIndex === -1) {
+    select.innerText = "Select Enemy";
+    return;
+  }
+    
     if(i+1==enemyAliens.ships.length){//if all ships are defeated it shows a winscreen
       winscreen();
       // break;
@@ -136,84 +190,95 @@ const createEnemies = () => {
   }
     
     
-    console.log(`Attacking enemy ${i + 1}...`);
-    while (USSAssembly.hull > 0 && currentShip.hull > 0 && attackButtonClicked) {
-      if (Math.random() < USSAssembly.accuracy) {
-        currentShip.hull -= USSAssembly.firepower;
-        console.log("***");
-        console.log(`You've hit enemy ${i + 1}!`);
-        console.log(`Ship Health: ${USSAssembly.hull}`);
-        console.log(`Enemy Health: ${currentShip.hull}`);
-        console.log("***");
-        console.log("");
-
-        pS += `Ship Health: ${USSAssembly.hull}\n`;
-        eS += `Enemy ${i + 1} Health: ${currentShip.hull}\n`
-        message += `You've hit enemy ${i + 1}!\n`;
-      } else {
-        console.log(`You've missed enemy ${i + 1}!`);
-        console.log("***");
-        console.log(`You've missed enemy ${i + 1}!`);
-        console.log(`Ship Health: ${USSAssembly.hull}`);
-        console.log(`Enemy Health: ${currentShip.hull}`);
-        console.log("***");
-        console.log("");
-
-        pS += `Ship Health: ${USSAssembly.hull}\n`;
-        eS += `Enemy ${i + 1} Health: ${currentShip.hull}\n`
-        message += `You've missed enemy ${i + 1}!\n`;
-      }
-
-      // Check to see if the alien ship is still able to fight (i.e., hull > 0)
-      if (currentShip.hull <= 0) {
-        console.log(`Enemy ${i + 1} is defeated!`);
-        message += `Enemy ${i + 1} is defeated!\n`;
-
-        document.getElementById(`enemy${i + 1}`).src = "/images/ship_destroyed.png";
-        explosion();
-        break;
-      }
-
-      if (Math.random() < currentShip.accuracy) {
-        USSAssembly.hull -= currentShip.firepower;
-        console.log(`Enemy ${i + 1} has hit your ship!`);
-        console.log("***");
-        console.log(`Ship Health: ${USSAssembly.hull}`);
-        console.log(`Enemy Health: ${currentShip.hull}`);
-        console.log("***");
-        console.log("");
-
-        pS += `Ship Health: ${USSAssembly.hull}\n`;
-        eS += `Enemy ${i + 1} Health: ${currentShip.hull}\n`
-        message += `Enemy ${i + 1} has hit your ship!\n`;
-      } else {
-        console.log(`Enemy ${i + 1} has missed your ship!`);
-        console.log("***");
-        console.log(`Ship Health: ${USSAssembly.hull}`);
-        console.log(`Enemy Health: ${currentShip.hull}`);
-        console.log("***");
-        console.log("");
-
-        pS += `Ship Health: ${USSAssembly.hull}\n`;
-        eS += `Enemy ${i + 1} Health: ${currentShip.hull}\n`
-        message += `Enemy ${i + 1} has missed your ship!\n`;
-      }
-
-      if (USSAssembly.hull <= 0) {
-        console.log("Ship destroyed! Game Over!");
-        message += "Ship destroyed! Game Over!\n";
-        shipImg.src = "/images/ship_destroyed.png";
-        deathSound();
-        loseScreen();
-        break;        
-      }
-    }
-    playerStats.innerText = pS;//display player ships stats
-    enemyStats.innerText = eS;//display enemy ship stats
-    resultContainer.innerText = message; // Display all the battle messages
-    attackButtonClicked = false;
+  if (currentShip.hull <= 0) {
+    console.log(`Enemy ${selectedEnemyIndex + 1} is already defeated!`);
+    return;
   }
-}
+  sheildWorking();
+  console.log(USSAssembly.hull);
+  console.log(`Attacking enemy ${selectedEnemyIndex + 1}...`);
+  while (USSAssembly.hull > 0 && currentShip.hull > 0 && attackButtonClicked) {
+    statsWindow.style.visibility = "visible"; //show stats window
+  resultContainer.style.visibility = "visible"; //show results container
+    if (Math.random() < USSAssembly.accuracy) {
+      currentShip.hull -= USSAssembly.firepower;
+      console.log("***");
+      console.log(`You've hit enemy ${selectedEnemyIndex + 1}!`);
+      console.log(`Ship Health: ${USSAssembly.hull}`);
+      console.log(`Enemy Health: ${currentShip.hull}`);
+      console.log("***");
+      console.log("");
+
+      pS += `Ship Health: ${USSAssembly.hull}\n`;
+      eS += `Enemy ${selectedEnemyIndex + 1} Health: ${currentShip.hull}\n`;
+      message += `You've hit enemy ${selectedEnemyIndex + 1}!\n`;
+    } else {
+      console.log(`You've missed enemy ${selectedEnemyIndex + 1}!`);
+      console.log("***");
+      console.log(`You've missed enemy ${selectedEnemyIndex + 1}!`);
+      console.log(`Ship Health: ${USSAssembly.hull}`);
+      console.log(`Enemy Health: ${currentShip.hull}`);
+      console.log("***");
+      console.log("");
+
+      pS += `Ship Health: ${USSAssembly.hull}\n`;
+      eS += `Enemy ${selectedEnemyIndex + 1} Health: ${currentShip.hull}\n`;
+      message += `You've missed enemy ${selectedEnemyIndex + 1}!\n`;
+    }
+
+    if (currentShip.hull <= 0) {
+      console.log(`Enemy ${selectedEnemyIndex + 1} is defeated!`);
+      message += `Enemy ${selectedEnemyIndex + 1} is defeated!\n`;
+
+      document.getElementById(`enemy${selectedEnemyIndex + 1}`).src =
+        "/images/ship_destroyed.png";
+      explosion();
+      // Check if all enemy ships are defeated
+      let allShipsDefeated = true;
+      for (let i = 0; i < enemyFleet.length; i++) {
+        if (enemyFleet[i].hull > 0) {
+          allShipsDefeated = false;
+          break;
+        }
+      }
+
+      if (allShipsDefeated) {
+        winscreen(); // Trigger win condition and end the game
+      }
+
+      break;
+    }
+
+    if (Math.random() < currentShip.accuracy) {
+      USSAssembly.hull -= currentShip.firepower;
+      console.log(`Enemy ${selectedEnemyIndex + 1} has hit your ship!`);
+      console.log("***");
+      console.log(`Ship Health: ${USSAssembly.hull}`);
+      console.log(`Enemy Health: ${currentShip.hull}`);
+      console.log("***");
+      console.log("");
+
+      pS += `Ship Health: ${USSAssembly.hull}\n`;
+      eS += `Enemy ${selectedEnemyIndex + 1} Health: ${currentShip.hull}\n`;
+
+      message += `Enemy ${selectedEnemyIndex + 1} has missed your ship!\n`;
+    }
+
+    if (USSAssembly.hull <= 0) {
+      console.log("Ship destroyed! Game Over!");
+      message += "Ship destroyed! Game Over!\n";
+      shipImg.src = "/images/ship_destroyed.png";
+      deathSound();
+      loseScreen();
+      break;
+    }
+  }
+  playerStats.innerText = pS; //display player ships stats
+  enemyStats.innerText = eS; //display enemy ship stats
+  resultContainer.innerText = message; // Display all the battle messages
+  attackButtonClicked = false;
+  }
+};
 //function for win screen
 const winscreen = () => {
   ships.remove();
@@ -224,8 +289,9 @@ const winscreen = () => {
   let win = document.createElement("h1");
   win.innerText='Mission Successful!\n click to play again';
   win.setAttribute("id", 'insert');
-  win.style.fontSize="85px";
-  document.getElementById("body").appendChild(win);
+  gameOver.style.fontSize="20px";
+  gameOver.style.marginBottom="200px";
+  document.getElementById("screen").appendChild(win);
   winSound();
   win.addEventListener("click", setTimeout(function(){
     location.reload();
@@ -242,8 +308,9 @@ const loseScreen = () => {
   let lose = document.createElement("h1");
   lose.innerText='Mission Failed!\n click to play again';
   lose.setAttribute("id", 'insert');
-  lose.style.fontSize="90px";
-  document.getElementById("body").appendChild(lose);
+  gameOver.style.fontSize="20px";
+  gameOver.style.marginBottom="200px";
+  document.getElementById("screen").appendChild(lose);
   lose.addEventListener("click", setTimeout(function(){
     location.reload();
 }, 4000));//reloads the page once clicked, delayed 4 seconds 
@@ -261,15 +328,16 @@ function retreat() {
   let gameOver = document.createElement("h1");
   gameOver.innerText='Strategic Retreat: Mission Failed!\n click to play again';
   gameOver.setAttribute("id", 'insert');
-  gameOver.style.fontSize="50px";
-  document.getElementById("body").appendChild(gameOver);
+  gameOver.style.fontSize="20px";
+  gameOver.style.marginBottom="200px";
+  document.getElementById("screen").appendChild(gameOver);
   gameOver.addEventListener("click", setTimeout(function(){
     location.reload();
 }, 4000));//reloads the page once clicked, delayed 4 seconds 
 
 }
 
-//function to start the game
+// function to start the game
 function startGame() {
   let shipImg = document.createElement("img");
   shipImg.src = "/images/USS_ship.png";
@@ -278,23 +346,17 @@ function startGame() {
   //above lines create and append the playerShip image
   wrapper.remove(); //removes the story element
 
-  statsWindow.style.visibility = "visible";//show stats window
-  resultContainer.style.visibility = "visible";//show results container
-  buttons.style.visibility = "visible";//show buttons
+  
+  buttons.style.visibility = "visible"; //show buttons
 
-  enemyAliens.addShips();
-  enemyAliens.addShips();
-  enemyAliens.addShips();
-  enemyAliens.addShips();
-  enemyAliens.addShips();
-  enemyAliens.addShips();
+
+  enemyAliens.generateFleet();
+
   createEnemies();
-}
-
+};
 document.getElementById("attack-btn").addEventListener("click", () => {
   attackButtonClicked = true; //makes sure the button is clicked
   attackEnemies(); // calls attackEnemies()
 });
 document.getElementById("retreat-btn").addEventListener("click", retreat);
 // Add event listeners to the attack and retreat buttons
-

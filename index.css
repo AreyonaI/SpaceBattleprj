@@ -1,16 +1,43 @@
+:root {
+  --gold: #c9c3ba;
+  --light-shadow: #706e69;
+  --dark-shadow: #373737;
+}
+
 @font-face {
-    font-family: PLANK_;
-    src: url(PLANK___.TTF);
-  }
+    font-family: SciFi;
+    src: url(SciFi.ttf);
+  }      
 @font-face {
   font-family: bit;
   src: url(8-bit-hud.ttf);
 }
 
 body{
-    cursor: url(images/coin2.png), crosshair;
-    background-image: url("https://media.istockphoto.com/id/1354982067/vector/sky-starry-black-night-background-with-star-starry-galaxy-space-8bit-texture-in-flat-style.jpg?s=170667a&w=0&k=20&c=mJzEnx-REZrfhBwBC19KOYKd6cjTNH3mmXu9Fg0atNY=");
-    text-align: center;
+ background-image: url("https://wallpaperaccess.com/full/1934779.jpg");  
+  background-color: gray;
+  background-repeat: repeat-y;
+  object-fit: contain;
+    width:100%;
+    
+  
+}
+
+#screen{
+  cursor: url(images/coin2.png), crosshair;
+  background-image: url("https://media.istockphoto.com/id/1354982067/vector/sky-starry-black-night-background-with-star-starry-galaxy-space-8bit-texture-in-flat-style.jpg?s=170667a&w=0&k=20&c=mJzEnx-REZrfhBwBC19KOYKd6cjTNH3mmXu9Fg0atNY=");
+  text-align: center;
+  height:10%;
+  width: 80%;
+  margin: auto;
+  padding:30px;
+  border-color: #aba8a8;
+  overflow: scroll;
+border-width: 10px;
+-webkit-box-shadow:0px 0px 18px 12px rgba(232,232,232,0.9);
+-moz-box-shadow: 0px 0px 18px 12px rgba(232,232,232,0.9);
+box-shadow: 0px 0px 18px 12px rgba(232,232,232,0.9);
+
 }
 #top, #update{
   display:flex;
@@ -18,55 +45,105 @@ body{
   justify-content: center;
   font-family: bit;
   color:white;
+  height:auto;
+  width:100%;
+  z-index: 2;
 }
-h1{
-    font-family: PLANK_;
-    color: white;
-    font-size: 50px;
-    text-shadow: 0 0 20px #FF0000;
-    letter-spacing: 3px;
-    text-align:center;
-    
-    
+#update, #wrapper,#Ship{
+  width:auto;
+  height:auto;
+  z-index: 1;
 }
-#credits, #statsWindow{
+#eShipStats{
+  font-size: 8px;
+  background-color: gray;
+    border-color: rgb(209, 4, 4);
+    border-width: 5px;
+    border-style: groove;
+}
+
+#select,#insert{
+  color:white;
+  margin-left:auto;
+  font-size: 12px;
+  z-index: 1;
+ }
+ #title{
   margin-left: auto;
+margin-right: auto;
+
+
+ }
+ #topCabinet{
+  border-width:10px;
+  border-color: #7f7f7f;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 3%;
+  text-align: center;
+  border-style:inset;
+  width:83%;
+  @supports (background-clip: text) or (-webkit-background-clip: text) {
+background-image:url("https://cdn2.vectorstock.com/i/1000x1000/81/76/pixel-art-planet-surface-space-arcade-8-bit-vector-44758176.jpg");
+background-size: 110% auto;
+    background-position: center;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;}
+   
+ }
+
+h1{
+ 
+  font-size: 60px;
+  margin:3%;
+  text-align: center;
+    font-family: SciFi;
+}
+
+#credits, #results{
+  margin-left: auto;
+  z-index: 1;
 }
 #insert{
+  text-shadow: -1px 0px 8px rgba(25, 66, 190, 0.76);
+  font-size: 50px;
   font-family: bit;
   position:relative;
     animation-name: title;
     animation-duration: 2.5s;
     animation-iteration-count: infinite;
+    border:none;
 }
 
 #player{
     height: 80px;
     position:relative;
-    animation-name: ship;
+    animation-name: shipMve;
     animation-duration: 3.2s;
     animation-iteration-count: infinite;
 }
 
-#enemy2,#enemy4,#enemy6{
+img[name="enemy"]:nth-child(odd){
+ 
   height:90px;
   position:relative;
-    animation-name: ship;
+    animation-name: shipMve;
     animation-duration: 4.2s;
     animation-iteration-count: infinite;
 }
-#enemy1,#enemy3,#enemy5{
+img[name="enemy"]:nth-child(even){
+  
   height:90px;
   position:relative;
-    animation-name: ship;
+    animation-name: shipMve;
     animation-duration: 4s;
     animation-iteration-count: infinite;
 }
 
-
-@keyframes ship {
+@keyframes shipMve {
   0%   {left:0px; top:0px;}
-  50%  { left:0px; top:200px;}
+  50%  { left:0px; top:150px;}
   100% { left:0px; top:0px;} 
 }
 @keyframes title {
@@ -75,20 +152,50 @@ h1{
   100% { left:0px; top:60px;} 
 }
 
+img[name~="enemy"] {
+  height:100px;
+  width:100px;
+    --color: #c02817; /* the color of the border */
+    --border: 5px;   /* the thickness of the border */
+    --offset: 30px;   /* control the movement of the border */
+    --gap: 0px;       /* the gap on hover */
+    
+    border-radius: 10%;
+    cursor: crosshair;
+  
+    padding: 0px;
+    border: var(--offset) solid #0000;
+    --_m: radial-gradient(50% 50%, #000 calc(90% - var(--offset)),#0000 calc(90% - var(--border)));
+    -webkit-mask: var(--_m);
+            mask: var(--_m);
+    --_g: #0000 calc(90% - var(--border)), var(--color) calc(90% - var(--border)) 90%,#0000;
+    --_s: var(--offset);
+     --_r: 90% 90% at;/*specifies that the gradient should start and end at the bottom right corner of the element. */
+    background:
+      radial-gradient(var(--_r) 0    0   ,var(--_g)) calc(100% + var(--_s)) calc(100% + var(--_s)),
+      radial-gradient(var(--_r) 100% 0   ,var(--_g)) calc(0%   - var(--_s)) calc(100% + var(--_s)),
+      radial-gradient(var(--_r) 0    100%,var(--_g)) calc(100% + var(--_s)) calc(0%   - var(--_s)),
+      radial-gradient(var(--_r) 100% 100%,var(--_g)) calc(0%   - var(--_s)) calc(0%   - var(--_s));
+    background-size: 30% 30%;
+    background-repeat: no-repeat;
+    transition: .4s;
+  }
+  img[name~="enemy"]:hover {
+    --_s: 0px
+  }
+  
 
 #Ship {
     display: flex;
     flex-direction: row;
-    margin-left: 25%;
-    margin-right: 20%;
+   justify-items: center;
+    
+    padding: 0px;
+    height:100px;
+  width:auto;
+
   }
-  #Ship :nth-child(1) { order: 1; }
-  #Ship :nth-child(2) { order: 2; }
-  #Ship :nth-child(3) { order: 3; }
-  #Ship :nth-child(4) { order: 4; }
-  #Ship :nth-child(5) { order: 5; }
-  #Ship :nth-child(6) { order: 6; }
-  #Ship :nth-child(7) { order: 7; }
+ 
 
   #red{
     color:red;
@@ -108,12 +215,24 @@ h1{
     border-color: yellow;
     border-width: 3px;
     border-style: groove;
-    height:180px;
+    height:auto;
     padding: 5px;
+    margin-top:150px;
+  }
+
+  #sheild{
+    text-align: center;
+  margin:0;
+  width:100px;
+  color:green;
   }
   
     
-
+#player-options{
+  margin:auto;
+  padding: 20px;
+  text-align: center;
+}
  
   /* CSS */
   .button-82-pushable, .button-83-pushable {
@@ -303,3 +422,147 @@ h1{
   }
 }
 
+#screen::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+#screen::-webkit-scrollbar-track {
+ color:transparent;
+ background-image: url("https://media.istockphoto.com/id/1354982067/vector/sky-starry-black-night-background-with-star-starry-galaxy-space-8bit-texture-in-flat-style.jpg?s=170667a&w=0&k=20&c=mJzEnx-REZrfhBwBC19KOYKd6cjTNH3mmXu9Fg0atNY=");
+ 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background-image: url(images/arrow.png); 
+  background-repeat: no-repeat, no-repeat;
+  background-size: 20px;
+}
+
+#pB,#pP,#pO{
+  top:350px;
+  animation: spin 15s infinite, spaceTravel 9.8s infinite;
+  position:relative;
+  height:auto;
+  width:auto;
+  
+}
+#pP{
+  top:200px;
+  animation-duration: 8s;
+}
+
+#pO{
+  top:450px;
+  /* animation-duration: 8.5s; */
+  animation:spin 15s infinite, spaceTravel 7.5s infinite; 
+}
+#m-1{
+  top:500px;
+  position:relative;
+  animation:side-to-side 5s alternate-reverse infinite, spaceTravel 10s infinite; 
+ }
+ #m-2{
+  position:relative;
+  animation:side-to-side 4.5s infinite, spaceTravel 10s infinite; 
+}
+
+/* #m-3{
+  top:-5px;
+  animation: diagonal-move-anim 2s  infinite;
+} */
+#m-4{
+  animation-name: spaceTravel;
+  position:relative;
+  animation-iteration-count: infinite;
+  animation-duration: 9s;
+ }
+ 
+ #m-5{
+  top:195px;
+  animation-name: spaceTravel;
+  position:relative;
+  animation-iteration-count: infinite;
+  animation-duration: 8s;
+ }
+ 
+ 
+@keyframes spin { 
+  100% { 
+      -webkit-transform: rotate(360deg); 
+      transform:rotate(360deg); 
+  } 
+}
+@keyframes side-to-side { 
+  0% { 
+      -webkit-transform: rotate(0deg); 
+      transform:rotate(0deg); 
+  } 
+  50%{
+    -webkit-transform: rotate(20deg); 
+      transform:rotate(20deg); 
+  }
+  100%{
+    -webkit-transform: rotate(0deg); 
+      transform:rotate(0deg); 
+  }
+}
+
+@keyframes spaceTravel {
+  0%   {left:1000px;}
+  /* 25%  {left:5000px;} */
+  
+  100%  {left:-1000px;}
+}
+
+@keyframes diagonal-move-anim {
+
+	0% {
+    top:0%;
+		transform: translate(100%,-200%);
+	}
+
+	100% {
+    top: 10000px;
+		transform: translate(-100%, 100%);
+	}
+
+}
+
+body {
+  margin: 0;
+}
+#topCabinet {
+  background: radial-gradient(#23222f, #0a0a32);
+  display: grid;
+}
+#topCabinet > h1 {
+  background-clip: text;  
+  -webkit-background-clip: text;
+  color: #363833;
+  font-family: 'scifi', sans-serif;
+  
+  font-size: clamp( 3em, 10vw, 15rem);
+  grid-area: overlap;
+  letter-spacing: 1px;
+  -webkit-text-stroke: 4px transparent;
+}
+h1#bg {
+  background-image: repeating-linear-gradient( 105deg, 
+    var(--gold) 0% , 
+    var(--dark-shadow) 5%,
+    var(--gold) 12%);
+  color: transparent;
+  filter: drop-shadow(5px 15px 15px black);
+  transform: scaleY(1.05);
+  transform-origin: top;
+}
+h1#fg{
+  background-image: repeating-linear-gradient( 5deg,  
+    var(--gold) 0% , 
+    var(--light-shadow) 23%, 
+    var(--gold) 31%);
+  color: #1e2127;
+  transform: scale(1);
+}
