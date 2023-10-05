@@ -1,3 +1,8 @@
+window.onload = function() {
+  alert("This game is best suited for a maximized browser");
+};
+
+
 class Ship {
   constructor(hull, firepower, accuracy) {
     this.hull = hull;
@@ -14,6 +19,8 @@ class Ship {
 const USSAssembly = new Ship(20, 5, 0.7);
 console.log(USSAssembly);
 
+
+//class that creates enemys with stats and adds them to the ships array
 class enemy {
   constructor() {
     this.ships = [];
@@ -23,18 +30,17 @@ class enemy {
     this.firepower = Math.round(Math.random() * (4 - 2) + 2); // enemy firepower is between 2 and 4
     this.accuracy = (Math.random() * (0.6 - 0.8) + 0.8).toFixed(1);
     // this.accuracy = Math.round((Math.random()*(.81 - .6) + .6) * 10) / 10//enemy accuracy is between .6 and .8
-    this.ships.push(new Ship(this.hull, this.firepower, this.accuracy));
+    this.ships.push({hull: this.hull, firepower: this.firepower, accuracy: this.accuracy, defeated: false });
   }
 // The aliens send a random number of ships to attack Earth. Think of a reasonable range and implement it.
   generateFleet() {
-    let x = Math.round(Math.random() * (6 - 3) + 9);
+    let x = Math.round(Math.random() * (6 - 3) + 8);
 
     for (let i = 0; i < x; i++) {
       this.addShips();
     }
   }
-
-}
+  }
 let enemyAliens = new enemy();
 //console.log(enemyAliens);
 
@@ -43,7 +49,6 @@ let playSound = () =>{
 }
 
 let playSound2 = () =>{
-  // music = new Audio("https://soundimage.org/wp-content/uploads/2016/07/Into-Battle_v001.mp3");
   music = new Audio("SLOWEST-TEMPO2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3");
   music.volume=0.2;
   music.loop=true;
@@ -54,12 +59,7 @@ let explosion = ()=>{
   explode.play();
  
 }
-let deathSound =() => {
-  new Audio("https://www.youtube.com/embed/D3gMd70fWVA?start=12").play();
-}
-let winSound =() => {
-  new Audio("https://www.youtube.com/embed/LwZQvJrAZmE").play();
-}
+
 
 let show = () => {
   // shows the story behind the game
@@ -98,16 +98,25 @@ resultContainer.style.visibility="hidden";
 document.getElementById("wrapper").addEventListener("click", startGame);
 let enemyShipStats = document.createElement("p");
 enemyShipStats.setAttribute("id", `eShipStats`);
+
 const sheild = document.getElementById("sheild");
 sheild.style.visibility="hidden";
 
+
+
+//sheild logic
 const sheildWorking = () => {
   // Scientists have improved your ship's shields. They don't work that consistently, and only improve your hit points by a random number each time
+
+  //close to 50/50 chance for sheild to activate
   const x = Math.random() < 0.5;
 
   if (x === true) {
     let sheildPwr = Math.round(Math.random() * 10);
+
     let shipImg=document.getElementById("player"); //randomizes ship sheild at the start of every battle
+
+    //if sheild works the image of the player ship is change to show it
     if (sheildPwr > 0) {
       sheild.style.visibility = "visible";
       
@@ -120,14 +129,18 @@ const sheildWorking = () => {
     }
   }
 };
+ 
+
 let selectedEnemyIndex = -1;
 const enemyFleet = enemyAliens.ships;
 
 let attackButtonClicked = false;
 let retreatButtonClicked = false;
+
+
+//logic for creating the enemy images
 const createEnemies = () => {
   
-
   for (let i = 0; i < enemyAliens.ships.length; i++) {
     
     let enemyImg = document.createElement("img");
@@ -135,21 +148,28 @@ const createEnemies = () => {
     enemyImg.setAttribute("id", `enemy${i + 1}`);
     enemyImg.setAttribute("name", `enemy`);
     document.getElementById("Ship").append(enemyImg);
-  //above lines create a enemy image for each enemy
+
+
   enemyImg.addEventListener("click", () => {
     // Scientists have developed a super targeting computer for your lasers. You now are asked which of the aliens you would like to hit with your lasers.
-    selectedEnemyIndex = i;
+  
+  //above lines create a enemy image for each enemy
+  selectedEnemyIndex = i;
+    //the index of the enemy that is selected is stored
+
+    //displays the stats of the selected enemy
     select.innerText = `Enemy ${selectedEnemyIndex + 1} Selected`;
     enemyShipStats.innerText = `Hull:${enemyFleet[selectedEnemyIndex].hull}\n
     Firepower: ${enemyFleet[selectedEnemyIndex].firepower}\n
     Accuracy:${enemyFleet[selectedEnemyIndex].accuracy}\n`;
     document.getElementById("select").append(enemyShipStats);
-    // console.log(enemyFleet[selectedEnemyIndex].hull);
   });
   document.getElementById("Ship").append(enemyImg);
-  //above lines create a enemy image for each enemy
+  //above line adds them to the ship div to display them
   }
 }
+
+
   const attackEnemies = () => {// Function to handle attacking the enemy ship
   const enemyFleet = enemyAliens.ships;
   const playerStats = document.getElementById("playerStats");
@@ -165,21 +185,28 @@ const createEnemies = () => {
       
       enemyImg=document.getElementsByName("enemy");
       currentShip.enemyImg = enemyImg;
-    
-    if(!attackButtonClicked){//if attack btn not hit it doesnt continue the loop
+   
+    if(!attackButtonClicked){//if attack btn not hit it doesnt continues the loop automatically
       return;
     }
 
-      if (selectedEnemyIndex === -1) {
+      if (selectedEnemyIndex === -1) {//if no enemy is selected and attck btn hit prompts user to select enemy
     select.innerText = "Select Enemy";
     return;
   }
-    
+    if (enemyFleet[selectedEnemyIndex].defeated) {
+      // If the selected enemy is defeated, show a message and return
+      select.innerText = "Enemy already defeated, select a new enemy";
+      return;
+    }
+   
+  
+
     if(i+1==enemyAliens.ships.length){//if all ships are defeated it shows a winscreen
       winscreen();
       // break;
     }
-    else if(!retreatButtonClicked){
+    else if(!retreatButtonClicked){//if retreat button not clicked game continues
     
     // Check if the enemy ship is already defeated
     if (currentShip.hull <= 0) {
@@ -198,8 +225,10 @@ const createEnemies = () => {
   console.log(USSAssembly.hull);
   console.log(`Attacking enemy ${selectedEnemyIndex + 1}...`);
   while (USSAssembly.hull > 0 && currentShip.hull > 0 && attackButtonClicked) {
+
     statsWindow.style.visibility = "visible"; //show stats window
   resultContainer.style.visibility = "visible"; //show results container
+
     if (Math.random() < USSAssembly.accuracy) {
       currentShip.hull -= USSAssembly.firepower;
       console.log("***");
@@ -212,7 +241,9 @@ const createEnemies = () => {
       pS += `Ship Health: ${USSAssembly.hull}\n`;
       eS += `Enemy ${selectedEnemyIndex + 1} Health: ${currentShip.hull}\n`;
       message += `You've hit enemy ${selectedEnemyIndex + 1}!\n`;
-    } else {
+    }
+     
+    else {
       console.log(`You've missed enemy ${selectedEnemyIndex + 1}!`);
       console.log("***");
       console.log(`You've missed enemy ${selectedEnemyIndex + 1}!`);
@@ -229,9 +260,10 @@ const createEnemies = () => {
     if (currentShip.hull <= 0) {
       console.log(`Enemy ${selectedEnemyIndex + 1} is defeated!`);
       message += `Enemy ${selectedEnemyIndex + 1} is defeated!\n`;
-
+      enemyFleet[selectedEnemyIndex].defeated=true;
       document.getElementById(`enemy${selectedEnemyIndex + 1}`).src =
         "/images/ship_destroyed.png";
+
       explosion();
       // Check if all enemy ships are defeated
       let allShipsDefeated = true;
@@ -268,7 +300,6 @@ const createEnemies = () => {
       console.log("Ship destroyed! Game Over!");
       message += "Ship destroyed! Game Over!\n";
       shipImg.src = "/images/ship_destroyed.png";
-      deathSound();
       loseScreen();
       break;
     }
@@ -277,25 +308,28 @@ const createEnemies = () => {
   enemyStats.innerText = eS; //display enemy ship stats
   resultContainer.innerText = message; // Display all the battle messages
   attackButtonClicked = false;
+  selectedEnemyIndex = -1;
   }
 };
+
 //function for win screen
 const winscreen = () => {
   ships.remove();
   buttons.remove();
+  screen = document.getElementById("screen");
+  screen.setAttribute("marginBottom", "1vh");
   document.getElementById("results").remove();
   document.getElementById("statsWindow").remove();
   document.getElementById("credits").innerText="Credits: 0";
   let win = document.createElement("h1");
   win.innerText='Mission Successful!\n click to play again';
   win.setAttribute("id", 'insert');
-  gameOver.style.fontSize="20px";
-  gameOver.style.marginBottom="200px";
+  win.style.fontSize="20px";
+  win.style.marginBottom="100px";
   document.getElementById("screen").appendChild(win);
-  winSound();
   win.addEventListener("click", setTimeout(function(){
     location.reload();
-}, 4000));//reloads the page once clicked, delayed 4 seconds 
+}, 5500));//reloads the page once clicked, delayed 5 seconds 
 
 }
 //function for lose screen
@@ -308,12 +342,12 @@ const loseScreen = () => {
   let lose = document.createElement("h1");
   lose.innerText='Mission Failed!\n click to play again';
   lose.setAttribute("id", 'insert');
-  gameOver.style.fontSize="20px";
-  gameOver.style.marginBottom="200px";
+  lose.style.fontSize="20px";
+  lose.style.marginBottom="200px";
   document.getElementById("screen").appendChild(lose);
   lose.addEventListener("click", setTimeout(function(){
     location.reload();
-}, 4000));//reloads the page once clicked, delayed 4 seconds 
+}, 10000));//reloads the page once clicked, delayed 4 seconds 
 
 }
   
@@ -333,7 +367,7 @@ function retreat() {
   document.getElementById("screen").appendChild(gameOver);
   gameOver.addEventListener("click", setTimeout(function(){
     location.reload();
-}, 4000));//reloads the page once clicked, delayed 4 seconds 
+}, 5500));//reloads the page once clicked, delayed 5 seconds 
 
 }
 
